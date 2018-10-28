@@ -1,0 +1,55 @@
+{
+	"id":"salleSejourGauche",
+	"background":"css/img/salleSejour.svg.png",
+	"listRectArea":[
+		{
+			"x":400, "y":120, "width":20, "height":80,
+			"listOn":[
+				{
+					"verb":"aller",
+					"action":{
+							"funct":"loadRoom",
+							"param":"comptoirAccueil"
+						}
+					}
+
+			]
+		}
+	],
+	"listImage":[
+		{
+			"id":"key101",
+			"x":140, "y":235,
+			"src":"css/img/key.png",
+			"listOn":[
+				{
+					"verb":"prendre",
+					"action":{
+						"funct":"addInventory"
+					}
+				},
+				{
+					"verb":"observer",
+					"action":{
+						"funct":"message",
+						"message":"C'est la clef de Mr XX"
+					}
+				}
+			]
+		},
+		{
+			"id":"rightArrow",
+			"x":520,"y":340,
+			"src":"css/img/rightArrow.png",
+			"listOn":[
+				{
+					"verb":"aller",
+					"action":{
+						"funct":"loadRoom",
+						"room":"salleSejourDroite"
+					}
+				}
+			]
+		}
+	]
+}

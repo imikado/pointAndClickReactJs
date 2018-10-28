@@ -1,0 +1,45 @@
+<html>
+
+<head>
+	<title>Point and click</title>
+	<meta content="">
+	<link rel="stylesheet" type="text/css" href="css/main.css" media="screen" />
+
+
+	<script>
+		var bDebug = 1;
+	</script>
+
+</head>
+
+<body>
+
+	<div id="root"></div>
+
+
+
+
+	<!-- Load React. -->
+	<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+	<script src="js/react/react.development.js" charset="utf-8"></script>
+	<script src="js/react/react-dom.development.js" charset="utf-8"></script>
+	<script src="js/react/react-router-dom.min.js" charset="utf-8"></script>
+	<script src="js/react/babel.min.js" charset="utf-8"></script>
+
+	<script>
+		const BrowserRouter = window.ReactRouterDOM.BrowserRouter;
+		const Route = window.ReactRouterDOM.Route;
+		const Link = window.ReactRouterDOM.Link;
+		const NavLink = window.ReactRouterDOM.NavLink;
+	</script>
+
+	<script src="js/EventBus.js" type="text/javascript"></script>
+
+	<script src="js/svg/svgImages.jsx" type="text/babel"></script>
+	<script src="js/Intro.jsx" type="text/babel"></script>
+	<script src="js/Game.jsx" type="text/babel"></script>
+	<script src="js/main.jsx" type="text/babel"></script>
+
+</body>
+
+</html>
