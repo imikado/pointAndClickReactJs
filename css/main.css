@@ -48,7 +48,7 @@ background:#fff;
 border:10px solid gray;
 }
 
-#verbs{
+.verbs{
 	margin:auto;
 
 	margin-top:10px;
@@ -58,7 +58,7 @@ border:10px solid gray;
 	width:620px;
 	height:30px;
 }
-#verbs a{
+.verbs a{
 	display:block;
 	float:left;
 	border:1px solid white;
@@ -69,12 +69,12 @@ border:10px solid gray;
 	text-decoration: none;
 }
 
-#verbs a.selected{
+.verbs a.selected{
 	border:1px solid darkblue;
 	background:darkblue;
 }
 
-#inventory{
+.inventory{
 	margin:auto;
 
 	margin-top:10px;
@@ -87,17 +87,17 @@ border:10px solid gray;
 	border:1px solid gray;
 
 }
-#inventory a{
+.inventory a{
 	border:4px solid white;
 	display:block;
 	float:left;
 	background:white;
 }
-#inventory a.selected{
+.inventory a.selected{
 	border:4px solid darkblue;
 }
 
-#inventory img{
+.inventory img{
 	height:30px;
 	width:30px;
 }

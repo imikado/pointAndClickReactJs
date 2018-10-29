@@ -7,7 +7,9 @@ class Game extends React.Component {
             tVerbs: [],
             roomToStart: '',
             tRoom: [],
-            tImage: []
+            tImage: [],
+            tVerbs: [],
+            verbSelected: ''
         };
         //this.handleChange = this.handleChange.bind(this);
 
@@ -17,11 +19,20 @@ class Game extends React.Component {
 
         this.loadData();
 
-        EventBus.subscribe('Game.selectItem', this.selectItem);
+        EventBus.subscribe('Game.selectItem', this.selectItem).bind(this);
+
+        EventBus.subscribe('Game.selectVerb', this.selectVerb.bind(this));
 
     }
 
+    selectVerb(verb_) {
+        this.setState({verbSelected: verb_});
+
+        console.log('selectVerb ' + verb_);
+    }
+
     selectItem(id_) {
+
         console.log('select Item ' + id_);
     }
 
@@ -57,7 +68,9 @@ class Game extends React.Component {
         this.loadRoom(this.state.roomToStart);
     }
 
-    processListVerbs(listVerbs) {}
+    processListVerbs(listVerbs) {
+        this.setState({tVerbs: listVerbs});
+    }
 
     loadRoom(room) {
         if (!this.state.tRoom[room]) {
@@ -155,15 +168,18 @@ class Game extends React.Component {
 
     render() {
 
-        return (<div id="Game" style={{
+        return (<div>
+            <div id="Game" style={{
 
-                background: 'url(' + this.state.background + ') bottom no-repeat'
-            }}>
-            <svg width="600" height="400">
-                <SvgImages tList={this.state.tImage}/>
+                    background: 'url(' + this.state.background + ') bottom no-repeat'
+                }}>
+                <svg width="600" height="400">
+                    <SvgImages tList={this.state.tImage}/>
 
-            </svg>
-        </div>);
+                </svg>
+
+            </div>
+            <ListVerbs verbSelected={this.state.verbSelected} tList={this.state.tVerbs}/></div>);
 
     }
 }
