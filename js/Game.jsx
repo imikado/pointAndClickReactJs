@@ -9,7 +9,9 @@ class Game extends React.Component {
             tRoom: [],
             tImage: [],
             tVerbs: [],
-            verbSelected: ''
+            verbSelected: '',
+            itemSelected: '',
+            inventorySelected: ''
         };
         //this.handleChange = this.handleChange.bind(this);
 
