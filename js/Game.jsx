@@ -19,7 +19,7 @@ class Game extends React.Component {
 
         this.loadData();
 
-        EventBus.subscribe('Game.selectItem', this.selectItem).bind(this);
+        EventBus.subscribe('Game.selectItem', this.selectItem.bind(this));
 
         EventBus.subscribe('Game.selectVerb', this.selectVerb.bind(this));
 
