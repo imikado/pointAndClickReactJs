@@ -38,7 +38,6 @@ class Intro extends React.Component {
 
     processData(oData) {
         console.log('processData Intro');
-        console.log(oData);
 
         this.setState({background: oData.background, width: oData.width, height: oData.height, text: oData.text.join('')});
 

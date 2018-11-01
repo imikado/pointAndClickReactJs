@@ -2,40 +2,191 @@ class Game extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
 
-            tVerbs: [],
+        this.verbSelected = '';
+        this.withSelected = '';
+        this.itemSelected = '';
+
+        this.roomSelected = '';
+
+        this.tInventory = Array();
+
+        this.state = {
             roomToStart: '',
-            tRoom: [],
+            tVerbs: [],
             tImage: [],
             tVerbs: [],
-            verbSelected: '',
-            itemSelected: '',
-            inventorySelected: ''
+            tInventory: this.tInventory,
+            verbSelected: this.verbSelected,
+            message: '',
+            messageDisplay: 'none',
+            messageBorderColor: 'white'
         };
-        //this.handleChange = this.handleChange.bind(this);
 
-        //this.loadData();
-
-        console.log('load Game');
+        this.tRoom = Array(),
+        this.tImage = Array(),
+        this.tEvent = Array();
 
         this.loadData();
 
         EventBus.subscribe('Game.selectItem', this.selectItem.bind(this));
-
         EventBus.subscribe('Game.selectVerb', this.selectVerb.bind(this));
+        EventBus.subscribe('Game.closeModal', this.closeModal.bind(this));
 
+    }
+
+    closeModal() {
+        this.setState({messageDisplay: 'none'});
+    }
+
+    resetSelection() {
+        //this.verbSelected = '';
+        this.withSelected = '';
+        this.itemSelected = '';
+
+        this.selectVerb('');
     }
 
     selectVerb(verb_) {
-        this.setState({verbSelected: verb_});
+        this.verbSelected = verb_;
 
-        console.log('selectVerb ' + verb_);
+        this.setState({verbSelected: verb_});
     }
 
-    selectItem(id_) {
+    selectItem(item_) {
 
-        console.log('select Item ' + id_);
+        this.itemSelected = item_;
+
+        if (this.verbSelected == '') {
+            this.messageError('Veuillez selectionner un verbe');
+        } else if (false == this.canExecuteAction(this.verbSelected, this.withSelected, this.itemSelected)) {
+            this.messageError('Je ne pense pas :( ');
+        }
+
+        this.resetSelection();
+    }
+
+    addInventory(oItem_) {
+
+        if (0 > this.tInventory.indexOf(oItem_)) {
+            this.tInventory.push(oItem_);
+
+            this.deleteImage(oItem_.id);
+
+        }
+    }
+
+    deleteImage(imageId_) {
+
+        var oRoom = this.tRoom[this.roomSelected];
+
+        var tImage = oRoom.tImage;
+        var newTimage = Array();
+        for (var i in tImage) {
+            if (tImage[i].id != imageId_) {
+                newTimage.push(tImage[i]);
+            }
+        }
+        oRoom.tImage = newTimage;
+
+        this.tRoom[this.roomSelected] = oRoom;
+
+        this.loadRoom(this.roomSelected);
+    }
+
+    processListEvent(listOn_, id_, room_) {
+        if (listOn_) {
+            for (var i in listOn_) {
+
+                var oOn = listOn_[i];
+                oOn.action.id = id_;
+                oOn.action.fromRoom = room_;
+
+                if (oOn.with) {
+                    this.addEvent([
+                        oOn.verb, oOn.with, id_
+                    ], oOn.action);
+
+                } else {
+                    this.addEvent([
+                        oOn.verb, id_
+                    ], oOn.action);
+
+                }
+
+            }
+        }
+    }
+
+    addEvent(tKey_, oAction_) {
+
+        if (!this.tEvent[tKey_.join('__')]) {
+            this.tEvent[tKey_.join('__')] = Array();
+        }
+
+        this.tEvent[tKey_.join('__')].push(oAction_);
+    }
+
+    canExecuteAction(verbSelected_, withSelected_, itemSelected_) {
+
+        var tKey = Array();
+        if (withSelected_ != '') {
+            tKey = [verbSelected_, withSelected_, itemSelected_];
+        } else {
+            tKey = [verbSelected_, itemSelected_];
+        }
+        var sKey = tKey.join('__');
+
+        if (this.tEvent[sKey]) {
+            this.executeAction(this.tEvent[sKey]);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    executeAction(tAction_) {
+
+        console.log('executeAction');
+        console.log(tAction_);
+
+        if (tAction_) {
+            for (var i in tAction_) {
+
+                var oAction = tAction_[i];
+
+                if (oAction.funct == 'addInventory') {
+                    this.addInventory(this.tImage[oAction.id]);
+
+                } else if (oAction.funct == 'loadRoom') {
+
+                    console.log('executeAction: loadRoom' + oAction.room);
+
+                    this.loadRoom(oAction.room);
+
+                } else if (oAction.funct == 'message') {
+                    this.message(oAction.message);
+                } else if (oAction.funct == 'setState') {
+                    this.setState(oAction.fromRoom, oAction.id, oAction.state);
+
+                    this.reloadRoom();
+                }
+            }
+        }
+
+    }
+
+    message(message_) {
+        console.log(message_);
+
+        this.setState({message: message_, messageDisplay: 'block', messageBorderColor: 'darkgreen'});
+    }
+
+    messageError(message_) {
+        console.log(message_);
+
+        this.setState({message: message_, messageDisplay: 'block', messageBorderColor: 'darkred'});
     }
 
     loadData() {
@@ -60,7 +211,6 @@ class Game extends React.Component {
 
     processData(oData) {
         console.log('processData Game');
-        console.log(oData);
 
         this.processListVerbs(oData.listVerbs);
 
@@ -75,40 +225,31 @@ class Game extends React.Component {
     }
 
     loadRoom(room) {
-        if (!this.state.tRoom[room]) {
+        if (!this.tRoom[room]) {
             this.readRoom(room);
             return;
         }
 
-        var oRoom = this.state.tRoom[room];
+        this.tEvent = Array();
+
+        this.roomSelected = room;
+
+        var oRoom = this.tRoom[room];
 
         console.log('set room background:' + oRoom.background);
         this.setState({background: oRoom.background, tImage: oRoom.tImage});
 
-        /*
         //image
         if (oRoom.tImage) {
-            console.log(oRoom.tImage);
             for (var i in oRoom.tImage) {
-
-                console.log('boucle image');
 
                 var oImage = oRoom.tImage[i];
 
                 this.processListEvent(oImage.listOn, oImage.id, room);
 
-                oSvg.addImage({
-                    "id": oImage.id,
-                    "class": "clickable",
-                    "x": oImage.x,
-                    "y": oImage.y,
-                    "opacity": 1,
-                    "src": oImage.src
-                });
-
             }
         }
-		*/
+
     }
 
     readRoom(room) {
@@ -138,8 +279,6 @@ class Game extends React.Component {
     processRoom(oJsonRoom) {
 
         console.log('processRoom');
-        console.log('json:');
-        console.log(oJsonRoom);
 
         var oRoom = {
             id: '',
@@ -157,10 +296,10 @@ class Game extends React.Component {
             var jsonImage = oJsonRoom.listImage[k];
             oRoom.tImage.push(jsonImage);
 
-            this.state.tImage[jsonImage.id] = jsonImage;
+            this.tImage[jsonImage.id] = jsonImage;
         }
 
-        this.state.tRoom[oJsonRoom.id] = oRoom;
+        this.tRoom[oJsonRoom.id] = oRoom;
 
     }
 
@@ -181,7 +320,10 @@ class Game extends React.Component {
                 </svg>
 
             </div>
-            <ListVerbs verbSelected={this.state.verbSelected} tList={this.state.tVerbs}/></div>);
+            <ListVerbs verbSelected={this.state.verbSelected} tList={this.state.tVerbs}/>
+            <ListInventory tList={this.state.tInventory}/>
+            <Modal message={this.state.message} messageDisplay={this.state.messageDisplay} messageBorderColor={this.state.messageBorderColor}/>
+        </div>);
 
     }
 }
