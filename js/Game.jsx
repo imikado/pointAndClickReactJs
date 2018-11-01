@@ -31,6 +31,7 @@ class Game extends React.Component {
 
         EventBus.subscribe('Game.selectItem', this.selectItem.bind(this));
         EventBus.subscribe('Game.selectVerb', this.selectVerb.bind(this));
+        EventBus.subscribe('Game.selectWith', this.selectWith.bind(this));
         EventBus.subscribe('Game.closeModal', this.closeModal.bind(this));
 
     }
@@ -41,16 +42,23 @@ class Game extends React.Component {
 
     resetSelection() {
         //this.verbSelected = '';
-        this.withSelected = '';
+        //this.withSelected = '';
         this.itemSelected = '';
 
         this.selectVerb('');
+        this.selectWith('');
     }
 
     selectVerb(verb_) {
         this.verbSelected = verb_;
 
         this.setState({verbSelected: verb_});
+    }
+
+    selectWith(with_) {
+        this.withSelected = with_;
+
+        this.setState({withSelected: with_});
     }
 
     selectItem(item_) {
@@ -321,7 +329,7 @@ class Game extends React.Component {
 
             </div>
             <ListVerbs verbSelected={this.state.verbSelected} tList={this.state.tVerbs}/>
-            <ListInventory tList={this.state.tInventory}/>
+            <ListInventory withSelected={this.state.withSelected} tList={this.state.tInventory}/>
             <Modal message={this.state.message} messageDisplay={this.state.messageDisplay} messageBorderColor={this.state.messageBorderColor}/>
         </div>);
 
