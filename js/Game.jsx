@@ -34,6 +34,8 @@ class Game extends React.Component {
         EventBus.subscribe('Game.selectWith', this.selectWith.bind(this));
         EventBus.subscribe('Game.closeModal', this.closeModal.bind(this));
 
+        EventBus.subscribe('Game.loadRoom', this.loadRoom.bind(this));
+
     }
 
     closeModal() {
@@ -99,6 +101,10 @@ class Game extends React.Component {
 
         this.tRoom[this.roomSelected] = oRoom;
 
+        this.reloadRoom();
+    }
+
+    reloadRoom() {
         this.loadRoom(this.roomSelected);
     }
 
@@ -176,13 +182,31 @@ class Game extends React.Component {
                 } else if (oAction.funct == 'message') {
                     this.message(oAction.message);
                 } else if (oAction.funct == 'setState') {
-                    this.setState(oAction.fromRoom, oAction.id, oAction.state);
-
-                    this.reloadRoom();
+                    this.switchState(oAction.fromRoom, oAction.id, oAction.state);
                 }
             }
         }
 
+    }
+
+    switchState(room_, id_, state_) {
+        var oRoom = this.tRoom[room_];
+
+        for (var i in oRoom.tImage) {
+            var oImage = oRoom.tImage[i];
+            if (oImage.id == id_) {
+                console.log('trouvee ' + oImage.id);
+
+                var oState = oImage.listState[state_];
+
+                console.log(oState);
+
+                for (var key in oState) {
+                    oImage[key] = oState[key];
+                }
+
+            }
+        }
     }
 
     message(message_) {
