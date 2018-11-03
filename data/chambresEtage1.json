@@ -91,13 +91,27 @@
 				},
 				{
 					"verb":"utiliser",
-					"with":"key102",
+					"with":"key103",
 					"action":{
 						"funct":"setState",
 						"state":"open"
 					}
 				}
-			]
+			],
+			"listState":{
+				"open":{
+					"src":"css/img/porteChambreOpened.png",
+					"listOn":[
+						{
+							"verb":"aller",
+							"action":{
+								"funct":"loadRoom",
+								"room":"room103"
+							}
+						}
+					]
+				}
+			}
 		},
 
 		{

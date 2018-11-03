@@ -20,7 +20,9 @@ class Game extends React.Component {
             verbSelected: this.verbSelected,
             message: '',
             messageDisplay: 'none',
-            messageBorderColor: 'white'
+            messageBorderColor: 'white',
+
+            withEnabled: false
         };
 
         this.tRoom = Array(),
@@ -55,6 +57,12 @@ class Game extends React.Component {
         this.verbSelected = verb_;
 
         this.setState({verbSelected: verb_});
+
+        if (verb_ == 'utiliser') {
+            this.setState({withEnabled: true});
+        } else {
+            this.setState({withEnabled: false});
+        }
     }
 
     selectWith(with_) {
@@ -86,22 +94,29 @@ class Game extends React.Component {
         }
     }
 
+    deleteFromInventory(inventory_) {
+        for (var i in this.tInventory) {
+            var oInventory = this.tInventory[i];
+
+            if (oInventory.id == inventory_) {
+                this.tInventory.splice(i - 1, 1);
+            }
+        }
+    }
+
     deleteImage(imageId_) {
 
         var oRoom = this.tRoom[this.roomSelected];
 
         var tImage = oRoom.tImage;
-        var newTimage = Array();
+        //var newTimage = Array();
         for (var i in tImage) {
             if (tImage[i].id != imageId_) {
-                newTimage.push(tImage[i]);
+
+                tImage.splice(i - 1, 1);
+
             }
         }
-        oRoom.tImage = newTimage;
-
-        this.tRoom[this.roomSelected] = oRoom;
-
-        this.reloadRoom();
     }
 
     reloadRoom() {
@@ -154,6 +169,10 @@ class Game extends React.Component {
         if (this.tEvent[sKey]) {
             this.executeAction(this.tEvent[sKey]);
 
+            if (withSelected_ != '') {
+                this.deleteFromInventory(withSelected_);
+            }
+
             return true;
         }
 
@@ -162,8 +181,8 @@ class Game extends React.Component {
 
     executeAction(tAction_) {
 
-        console.log('executeAction');
-        console.log(tAction_);
+        Debug.log('executeAction');
+        Debug.log(tAction_);
 
         if (tAction_) {
             for (var i in tAction_) {
@@ -175,7 +194,7 @@ class Game extends React.Component {
 
                 } else if (oAction.funct == 'loadRoom') {
 
-                    console.log('executeAction: loadRoom' + oAction.room);
+                    Debug.log('executeAction: loadRoom' + oAction.room);
 
                     this.loadRoom(oAction.room);
 
@@ -195,11 +214,11 @@ class Game extends React.Component {
         for (var i in oRoom.tImage) {
             var oImage = oRoom.tImage[i];
             if (oImage.id == id_) {
-                console.log('trouvee ' + oImage.id);
+                Debug.log('trouvee ' + oImage.id);
 
                 var oState = oImage.listState[state_];
 
-                console.log(oState);
+                Debug.log(oState);
 
                 for (var key in oState) {
                     oImage[key] = oState[key];
@@ -210,19 +229,19 @@ class Game extends React.Component {
     }
 
     message(message_) {
-        console.log(message_);
+        Debug.log(message_);
 
         this.setState({message: message_, messageDisplay: 'block', messageBorderColor: 'darkgreen'});
     }
 
     messageError(message_) {
-        console.log(message_);
+        Debug.log(message_);
 
         this.setState({message: message_, messageDisplay: 'block', messageBorderColor: 'darkred'});
     }
 
     loadData() {
-        console.log('loadData');
+        Debug.log('loadData');
 
         var requestURL = './data/main.json';
 
@@ -234,7 +253,7 @@ class Game extends React.Component {
         oRequest.oGame = this;
 
         oRequest.onload = function() {
-            console.log('loaded');
+            Debug.log('loaded');
             var oData = oRequest.response;
 
             this.oGame.processData(oData);
@@ -242,7 +261,7 @@ class Game extends React.Component {
     }
 
     processData(oData) {
-        console.log('processData Game');
+        Debug.log('processData Game');
 
         this.processListVerbs(oData.listVerbs);
 
@@ -268,7 +287,7 @@ class Game extends React.Component {
 
         var oRoom = this.tRoom[room];
 
-        console.log('set room background:' + oRoom.background);
+        Debug.log('set room background:' + oRoom.background);
         this.setState({background: oRoom.background, tImage: oRoom.tImage});
 
         //image
@@ -287,7 +306,7 @@ class Game extends React.Component {
     readRoom(room) {
         var requestURL = './data/' + room + '.json';
 
-        console.log("readRoom " + requestURL);
+        Debug.log("readRoom " + requestURL);
 
         var oRequest = new XMLHttpRequest();
         oRequest.open('GET', requestURL, true);
@@ -310,7 +329,7 @@ class Game extends React.Component {
 
     processRoom(oJsonRoom) {
 
-        console.log('processRoom');
+        Debug.log('processRoom');
 
         var oRoom = {
             id: '',
@@ -336,7 +355,7 @@ class Game extends React.Component {
     }
 
     start() {
-        console.log('start Game');
+        Debug.log('start Game');
     }
 
     render() {
@@ -353,7 +372,7 @@ class Game extends React.Component {
 
             </div>
             <ListVerbs verbSelected={this.state.verbSelected} tList={this.state.tVerbs}/>
-            <ListInventory withSelected={this.state.withSelected} tList={this.state.tInventory}/>
+            <ListInventory enabled={this.state.withEnabled} withSelected={this.state.withSelected} tList={this.state.tInventory}/>
             <Modal message={this.state.message} messageDisplay={this.state.messageDisplay} messageBorderColor={this.state.messageBorderColor}/>
         </div>);
 

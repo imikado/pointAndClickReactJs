@@ -87,6 +87,11 @@ border:10px solid gray;
 	border:1px solid gray;
 
 }
+
+.disabled{
+	opacity:0.2;
+}
+
 .inventory a{
 	border:4px solid white;
 	display:block;
@@ -100,6 +105,10 @@ border:10px solid gray;
 .inventory img{
 	height:30px;
 	width:30px;
+}
+
+.disabled a{
+	cursor:default;
 }
 
 #bar{

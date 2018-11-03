@@ -10,14 +10,14 @@ class Intro extends React.Component {
             text: ''
         };
 
-        console.log('load Intro');
+        Debug.log('load Intro');
 
         this.loadData();
 
     }
 
     loadData() {
-        console.log('loadData');
+        Debug.log('loadData');
 
         var requestURL = './data/main.json';
 
@@ -29,7 +29,7 @@ class Intro extends React.Component {
         oRequest.oGame = this;
 
         oRequest.onload = function() {
-            console.log('loaded');
+            Debug.log('loaded');
             var oData = oRequest.response;
 
             this.oGame.processData(oData.intro);
@@ -37,7 +37,7 @@ class Intro extends React.Component {
     }
 
     processData(oData) {
-        console.log('processData Intro');
+        Debug.log('processData Intro');
 
         this.setState({background: oData.background, width: oData.width, height: oData.height, text: oData.text.join('')});
 

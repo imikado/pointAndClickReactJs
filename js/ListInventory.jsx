@@ -7,14 +7,29 @@ class ListInventory extends React.Component {
         return '';
     }
 
-    render() {
-        return (<div className="inventory">
+    getClass(isEnabled_) {
+        if (isEnabled_) {
+            return "inventory";
+        } else {
+            return "inventory disabled"
+        }
+    }
 
-            {
-                this.props.tList.map((oWith, index) => <a href="#" onClick={function() {
-                        EventBus.publish('Game.selectWith', oWith.id)
-                    }} className={this.isSelected(oWith.id)} key={index}><img src={oWith.src}/></a>)
+    getOnclick(isEnabled_, oWith_) {
+        if (isEnabled_) {
+            return function() {
+
+                EventBus.publish('Game.selectWith', oWith_.id)
             }
+        } else {
+            return null;
+        }
+    }
+
+    render() {
+        return (<div className={this.getClass(this.props.enabled)}>
+
+            {this.props.tList.map((oWith, index) => <a href="#" onClick={this.getOnclick(this.props.enabled, oWith)} className={this.isSelected(oWith.id)} key={index}><img src={oWith.src}/></a>)}
 
         </div>);
     }
