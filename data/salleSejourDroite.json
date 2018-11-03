@@ -3,6 +3,21 @@
 	"background":"css/img/salleSejourDroite.svg.png",
 
 	"listImage":[
+
+
+		{
+			"id":"perso3",
+			"x":20,"y":140,
+			"src":"css/img/salleSejourDroitePerso3.png"
+		},
+
+		{
+			"id":"perso4",
+			"x":430,"y":170,
+			"src":"css/img/salleSejourDroitePerso4.png"
+		},
+
+
 		{
 			"id":"key102",
 			"x":140, "y":195,

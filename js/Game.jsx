@@ -35,6 +35,7 @@ class Game extends React.Component {
         EventBus.subscribe('Game.selectVerb', this.selectVerb.bind(this));
         EventBus.subscribe('Game.selectWith', this.selectWith.bind(this));
         EventBus.subscribe('Game.closeModal', this.closeModal.bind(this));
+        EventBus.subscribe('Game.closeConversation', this.closeConversation.bind(this));
 
         EventBus.subscribe('Game.loadRoom', this.loadRoom.bind(this));
 
@@ -42,6 +43,10 @@ class Game extends React.Component {
 
     closeModal() {
         this.setState({messageDisplay: 'none'});
+    }
+
+    closeConversation() {
+        this.setState({conversationDisplay: 'none'});
     }
 
     resetSelection() {
@@ -202,6 +207,8 @@ class Game extends React.Component {
                     this.message(oAction.message);
                 } else if (oAction.funct == 'setState') {
                     this.switchState(oAction.fromRoom, oAction.id, oAction.state);
+                } else if (oAction.funct == 'conversation') {
+                    this.conversation(oAction.listConversation);
                 }
             }
         }
@@ -238,6 +245,10 @@ class Game extends React.Component {
         Debug.log(message_);
 
         this.setState({message: message_, messageDisplay: 'block', messageBorderColor: 'darkred'});
+    }
+
+    conversation(listConversation_) {
+        this.setState({conversationList: listConversation_, conversationDisplay: 'block'});
     }
 
     loadData() {
@@ -374,6 +385,8 @@ class Game extends React.Component {
             <ListVerbs verbSelected={this.state.verbSelected} tList={this.state.tVerbs}/>
             <ListInventory enabled={this.state.withEnabled} withSelected={this.state.withSelected} tList={this.state.tInventory}/>
             <Modal message={this.state.message} messageDisplay={this.state.messageDisplay} messageBorderColor={this.state.messageBorderColor}/>
+
+            <Conversation tMessage={this.state.conversationList} conversationDisplay={this.state.conversationDisplay}/>
         </div>);
 
     }
