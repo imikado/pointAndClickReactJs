@@ -30,7 +30,12 @@
 							["L","Bonjour"],
 							["R","Bonjour Mr XX"],
 							["R","Pouvez vous me racontez les faits de ce soir ?"],
-							["L","Et bien j'etais avec Mme YY"]
+							["L","Et bien j'étais avec Mme Heineger en debut de soirée"],
+							["L","Elle s'est plein de demangeaison au niveau de son collier"],
+							["R","Des démangeaisons ?"]
+							["L","Oui elle est devenu rouge au niveau de son cou"],
+							["R","Est-elle allergique à quelques chose ?"],
+							["L","Je ne sais pas, il faudrait lui demander.."]
 
 						]
 					}
