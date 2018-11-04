@@ -9,9 +9,11 @@ background:#000;
 }
 
 .btn{
-	border:1px solid gray;
-	background:#ddd;
-	
+	background:#777;
+	padding:6px 10px;
+	border:0px;
+	color:#fff;
+	cursor: hand;
 }
 
 
@@ -208,6 +210,9 @@ color:darkred;
     border: 1px solid #888;
     width: 80%;
 }
+.modal-content p{
+	margin-top:38px;
+}
 
 /* The Close Button */
 .close {
@@ -215,6 +220,9 @@ color:darkred;
     float: right;
     font-size: 28px;
     font-weight: bold;
+	padding:0px;
+	margin:0px;
+	padding-left:18px;
 }
 .close{
     text-decoration:none;

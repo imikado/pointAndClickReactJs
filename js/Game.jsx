@@ -315,7 +315,8 @@ class Game extends React.Component {
     }
 
     readRoom(room) {
-        var requestURL = './data/' + room + '.json';
+
+        var requestURL = './data/' + room + '.json?datetime=' + Date.now();
 
         Debug.log("readRoom " + requestURL);
 

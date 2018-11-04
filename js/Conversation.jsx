@@ -3,18 +3,25 @@ class Conversation extends React.Component {
     constructor(props) {
         super(props);
 
-        this.iStep = 0;
-
         this.state = {
-            iStep: this.iStep,
+            iStep: 0,
             buttonEnabled: true
         };
 
     }
 
     getConversation() {
-        if (this.props.tMessage) {
+        if (this.props.tMessage && this.props.tMessage[this.state.iStep]) {
             return this.props.tMessage[this.state.iStep][1];
+        }
+    }
+    getAlignConversation() {
+        if (this.props.tMessage && this.props.tMessage[this.state.iStep]) {
+            if ("L" == this.props.tMessage[this.state.iStep][0]) {
+                return 'left';
+            } else {
+                return 'right';
+            }
         }
     }
 
@@ -24,7 +31,7 @@ class Conversation extends React.Component {
 
         iStepNext++;
 
-        console.log('stePnet:' + iStepNext + ' length : ' + this.props.tMessage.length);
+        Debug.log('iStepNext:' + iStepNext + ' length : ' + this.props.tMessage.length);
 
         if ((iStepNext + 1) >= this.props.tMessage.length) {
 
@@ -39,10 +46,20 @@ class Conversation extends React.Component {
 
     isButtonEnabled() {
         if (this.state.buttonEnabled) {
-            return 'block';
+            return 'visible';
         } else {
-            return 'none';
+            return 'hidden';
         }
+    }
+
+    closeFunction() {
+
+        this.setState({iStep: 0, buttonEnabled: true});
+
+        Debug.log('close fonction conversation');
+
+        EventBus.publish('Game.closeConversation');
+
     }
 
     render() {
@@ -51,19 +68,22 @@ class Conversation extends React.Component {
                 display: this.props.conversationDisplay
             }}>
 
-            <div className="modal-content">
-                <a className="close" href="#" onClick={function() {
-                        EventBus.publish('Game.closeConversation')
-                    }}>&times;</a>
-                <p className="myModalTxt">{this.getConversation()}</p>
+            <div className="modal-content" style={{
+                    border: '6px solid #777'
+
+                }}>
+                <a className="close" href="#" onClick={this.closeFunction.bind(this)}>&times;</a>
+                <p className="myModalTxt" style={{
+                        textAlign: this.getAlignConversation()
+                    }}>{this.getConversation()}</p>
 
                 <p style={{
                         textAlign: 'right'
                     }}>
                     <button className="btn" style={{
-                            display: this.isButtonEnabled()
+                            visibility: this.isButtonEnabled()
                         }} onClick={this.nextStep.bind(this)}>
-                        Next</button>
+                        Suivant</button>
                 </p>
             </div>
         </div>);
